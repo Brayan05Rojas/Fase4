@@ -6,7 +6,7 @@ from entidades import Entidad
 class Servicio(Entidad):
     """
     Clase abstracta que representa los servicios
-    ofrecidos por la empresa Software FJ.
+    ofrecidos por Software FJ.
     """
 
     def __init__(self, identificador, nombre, precio_base):
@@ -24,8 +24,37 @@ class Servicio(Entidad):
     def precio_base(self):
         return self._precio_base
 
-    def obtener_informacion(self):
-        return self.describir_servicio()
+    @abstractmethod
+    def calcular_costo(self, duracion, impuesto=0, descuento=0):
+        pass
+
+    @abstractmethod
+    def validar_parametros(self, duracion):
+        pass
+
+    def calcular_total(self, duracion, impuesto=0, descuento=0):
+        """
+        Calcula el costo aplicando impuesto y descuento porcentual.
+        """
+        self.validar_parametros(duracion)
+
+        if not isinstance(impuesto, (int, float)) or isinstance(impuesto, bool):
+            raise ValueError("El impuesto debe ser numérico.")
+
+        if impuesto < 0:
+            raise ValueError("El impuesto no puede ser negativo.")
+
+        if not isinstance(descuento, (int, float)) or isinstance(descuento, bool):
+            raise ValueError("El descuento debe ser numérico.")
+
+        if descuento < 0 or descuento > 100:
+            raise ValueError("El descuento debe estar entre 0 y 100.")
+
+        subtotal = self.precio_base * duracion
+        valor_con_descuento = subtotal * (1 - descuento / 100)
+        total = valor_con_descuento * (1 + impuesto / 100)
+
+        return total
 
     def describir_servicio(self):
         return (
@@ -34,35 +63,8 @@ class Servicio(Entidad):
             f"Precio base: ${self.precio_base:,.2f}"
         )
 
-    def calcular_total(self, duracion, impuesto=0, descuento=0):
-        """
-        Calcula el costo aplicando impuestos y descuentos porcentuales.
-        """
-        if not isinstance(impuesto, (int, float)) or isinstance(impuesto, bool):
-            raise ValueError("El impuesto debe ser numérico.")
-
-        if not isinstance(descuento, (int, float)) or isinstance(descuento, bool):
-            raise ValueError("El descuento debe ser numérico.")
-
-        if impuesto < 0:
-            raise ValueError("El impuesto no puede ser negativo.")
-
-        if descuento < 0 or descuento > 100:
-            raise ValueError("El descuento debe estar entre 0 y 100.")
-
-        subtotal = self.precio_base * duracion
-        valor_impuesto = subtotal * (impuesto / 100)
-        valor_descuento = subtotal * (descuento / 100)
-
-        return subtotal + valor_impuesto - valor_descuento
-
-    @abstractmethod
-    def calcular_costo(self, duracion, impuesto=0, descuento=0):
-        pass
-
-    @abstractmethod
-    def validar_parametros(self, duracion):
-        pass
+    def obtener_informacion(self):
+        return self.describir_servicio()
 
 
 # =====================================================
@@ -72,7 +74,6 @@ class Servicio(Entidad):
 class ReservaSala(Servicio):
 
     def calcular_costo(self, duracion, impuesto=0, descuento=0):
-        self.validar_parametros(duracion)
         return self.calcular_total(duracion, impuesto, descuento)
 
     def validar_parametros(self, duracion):
@@ -80,7 +81,7 @@ class ReservaSala(Servicio):
             raise ValueError("La duración debe ser numérica.")
 
         if duracion <= 0:
-            raise ValueError("La duración debe ser mayor que cero.")
+            raise ValueError("La duración de la reserva debe ser mayor que cero.")
 
     def describir_servicio(self):
         return (
@@ -96,7 +97,6 @@ class ReservaSala(Servicio):
 class AlquilerEquipos(Servicio):
 
     def calcular_costo(self, duracion, impuesto=0, descuento=0):
-        self.validar_parametros(duracion)
         return self.calcular_total(duracion, impuesto, descuento)
 
     def validar_parametros(self, duracion):
@@ -120,7 +120,6 @@ class AlquilerEquipos(Servicio):
 class AsesoriaEspecializada(Servicio):
 
     def calcular_costo(self, duracion, impuesto=0, descuento=0):
-        self.validar_parametros(duracion)
         return self.calcular_total(duracion, impuesto, descuento)
 
     def validar_parametros(self, duracion):
@@ -135,4 +134,3 @@ class AsesoriaEspecializada(Servicio):
             f"Asesoría especializada: {self.nombre} | "
             f"Tarifa por hora: ${self.precio_base:,.2f}"
         )
-
