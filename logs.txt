@@ -1,0 +1,13 @@
+2026-11-21 21:44:40,883 - INFO - Sistema Software FJ iniciado.
+2026-11-21 21:44:40,883 - INFO - Cliente registrado: Carlos Pérez
+2026-11-21 21:44:40,885 - ERROR - Error al registrar cliente: El correo electrónico no es válido.
+2026-11-21 21:44:40,886 - INFO - Servicio registrado: Sala de reuniones
+2026-11-21 21:44:40,887 - ERROR - Error al crear servicio: El precio base debe ser mayor que cero.
+2026-11-21 21:44:40,888 - INFO - Servicio registrado: Alquiler de computadores
+2026-11-21 21:44:40,890 - INFO - Servicio registrado: Asesoría informática
+2026-11-21 21:44:40,892 - INFO - Reserva creada: R001
+2026-11-21 21:44:40,895 - ERROR - Error al crear reserva: El tiempo de alquiler debe ser mayor que cero.
+2026-11-21 21:44:40,897 - INFO - Reserva R001 procesada correctamente.
+2026-11-21 21:44:40,902 - INFO - Reserva R001 cancelada.
+2026-11-21 21:44:40,903 - WARNING - Intento de procesar una reserva cancelada: La reserva no está disponible para procesarse.
+2026-11-21 21:44:40,920 - INFO - Ejecución del sistema finalizada.
